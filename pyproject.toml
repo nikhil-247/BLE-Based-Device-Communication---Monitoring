@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ble-device-monitor"
+version = "0.1.0"
+description = "Cross-platform BLE discovery, GATT inspection, and event monitoring toolkit"
+requires-python = ">=3.10"
+dependencies = [
+  "bleak>=0.22,<2",
+  "pydantic>=2.7,<3",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<9", "pytest-asyncio>=0.23,<2"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+asyncio_mode = "auto"
