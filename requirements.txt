@@ -1,0 +1,4 @@
+bleak>=0.22,<2
+pydantic>=2.7,<3
+pytest>=8,<9
+pytest-asyncio>=0.23,<2
