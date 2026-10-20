@@ -103,8 +103,14 @@ async def test_write_sends_bytes_and_response_flag(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_subscribe_uses_disconnect_callback_and_cleans_up(monkeypatch):
-    client = FakeClient("AA:BB:CC:DD:EE:FF")
-    monkeypatch.setattr(gatt, "BleakClient", lambda *_a, **_k: client)
+    clients = []
+
+    def fake_client(address, disconnected_callback=None):
+        client = FakeClient(address, disconnected_callback=disconnected_callback)
+        clients.append(client)
+        return client
+
+    monkeypatch.setattr(gatt, "BleakClient", fake_client)
     observed = []
 
     await gatt.subscribe(
@@ -113,5 +119,6 @@ async def test_subscribe_uses_disconnect_callback_and_cleans_up(monkeypatch):
         lambda characteristic, data: observed.append((characteristic, data)),
     )
 
+    client = clients[0]
     assert client.notify_callback is not None
     assert client.stopped_uuid == "2A37"
